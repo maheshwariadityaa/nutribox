@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriBox – Personalized Subscription Meal Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-light: #E1F5EE;
+  --green-mid: #5DCAA5;
+  --amber: #EF9F27;
+  --amber-light: #FAEEDA;
+  --purple: #7F77DD;
+  --purple-light: #EEEDFE;
+  --cream: #FAFAF7;
+  --ink: #1A1A18;
+  --ink-soft: #3D3D3A;
+  --ink-muted: #7A7A75;
+  --border: rgba(0,0,0,0.08);
+  --white: #FFFFFF;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 5%;
+  background: rgba(250,250,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--ink);
+  text-decoration: none;
+}
+.logo-mark {
+  width: 36px; height: 36px; background: var(--green);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: white; font-weight: 700;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-soft);
+  font-size: 14px; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+.nav-cta {
+  background: var(--green); color: white;
+  border: none; padding: 10px 22px; border-radius: 100px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.nav-cta:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 4rem;
+  padding: 8rem 5% 4rem;
+  background: var(--cream);
+  position: relative; overflow: hidden;
+}
+.hero-bg-circle {
+  position: absolute; right: -10%; top: 10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #E1F5EE 0%, transparent 70%);
+  border-radius: 50%; z-index: 0;
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-light); color: var(--green-dark);
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 900; line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero-title span { color: var(--green); }
+.hero-sub {
+  font-size: 17px; line-height: 1.7; color: var(--ink-soft);
+  max-width: 480px; margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-actions {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.btn-primary {
+  background: var(--green); color: white;
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  border: none; text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29,158,117,0.3); }
+.btn-secondary {
+  background: transparent; color: var(--ink);
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  border: 1.5px solid var(--border);
+  text-decoration: none; display: inline-block;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--green); color: var(--green); }
+.hero-stats {
+  display: flex; gap: 2rem; margin-top: 3rem;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.hero-stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 700; color: var(--ink);
+}
+.hero-stat-lbl { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
+
+/* HERO VISUAL */
+.hero-visual {
+  position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.phone-frame {
+  width: 280px; margin: 0 auto;
+  background: var(--ink); border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+}
+.phone-screen {
+  background: var(--white); border-radius: 30px; overflow: hidden;
+  min-height: 500px;
+}
+.phone-header {
+  background: var(--green); padding: 20px 16px 16px;
+  color: white;
+}
+.phone-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.phone-greeting { font-size: 12px; opacity: 0.8; }
+.phone-name { font-size: 17px; font-weight: 600; }
+.phone-avatar { width: 32px; height: 32px; background: rgba(255,255,255,0.3); border-radius: 50%; display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600; }
+.cal-pill { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 6px 12px; }
+.cal-pill span { font-size: 20px; font-weight: 700; } .cal-pill p { font-size: 10px; opacity: 0.8; }
+.phone-body { padding: 14px; }
+.meal-card-mini {
+  background: var(--cream); border-radius: 14px; padding: 12px; margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--border);
+  animation: slideIn 0.5s ease both;
+}
+.meal-card-mini:nth-child(2) { animation-delay: 0.1s; }
+.meal-card-mini:nth-child(3) { animation-delay: 0.2s; }
+@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.meal-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); margin-right: 8px; flex-shrink: 0; }
+.meal-dot.amber { background: var(--amber); }
+.meal-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+.meal-time { font-size: 10px; color: var(--ink-muted); }
+.meal-kcal { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-light); padding: 3px 8px; border-radius: 20px; }
+.floating-card {
+  position: absolute; background: white; border-radius: 16px;
+  padding: 10px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  font-size: 12px;
+}
+.floating-card.left { left: -60px; top: 30%; }
+.floating-card.right { right: -60px; bottom: 20%; }
+.fc-val { font-size: 18px; font-weight: 700; color: var(--ink); }
+.fc-lbl { color: var(--ink-muted); font-size: 11px; }
+
+/* SECTIONS */
+section { padding: 6rem 5%; }
+.section-badge {
+  display: inline-block; background: var(--green-light); color: var(--green-dark);
+  padding: 4px 14px; border-radius: 100px; font-size: 12px;
+  font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+  line-height: 1.15; color: var(--ink); margin-bottom: 1rem;
+}
+.section-sub { font-size: 16px; color: var(--ink-muted); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+
+/* PROBLEM */
+#problem { background: var(--ink); color: white; }
+#problem .section-badge { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+#problem .section-title { color: white; }
+#problem .section-sub { color: rgba(255,255,255,0.6); }
+.problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.problem-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 1.5rem;
+  transition: all 0.3s;
+}
+.problem-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+.problem-icon {
+  width: 44px; height: 44px; background: rgba(29,158,117,0.2);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 1rem;
+}
+.problem-card h3 { font-size: 16px; font-weight: 600; color: white; margin-bottom: 6px; }
+.problem-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+/* HOW IT WORKS */
+#how { background: var(--cream); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+.step { text-align: center; position: relative; }
+.step::after {
+  content: '→'; position: absolute; top: 28px; right: -1rem;
+  color: var(--green-mid); font-size: 20px;
+}
+.step:last-child::after { display: none; }
+.step-num {
+  width: 56px; height: 56px; background: var(--green);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: white;
+  margin: 0 auto 1rem;
+}
+.step h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.step p { font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
+
+/* FEATURES */
+#features { background: white; }
+.features-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.feature-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.feature-item { display: flex; gap: 1rem; align-items: flex-start; }
+.feature-icon-box {
+  width: 44px; height: 44px; flex-shrink: 0;
+  background: var(--green-light); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.feature-item h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.feature-item p { font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
+.features-visual {
+  background: var(--cream); border-radius: 24px; padding: 2rem;
+  border: 1px solid var(--border);
+}
+.nutrition-bar { margin-bottom: 1.2rem; }
+.nb-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.nb-label span:first-child { color: var(--ink-soft); font-weight: 500; }
+.nb-label span:last-child { color: var(--ink-muted); }
+.nb-track { background: var(--border); border-radius: 100px; height: 8px; overflow: hidden; }
+.nb-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+
+/* PLANS */
+#plans { background: var(--cream); }
+.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.plan-card {
+  background: white; border-radius: 24px; padding: 2rem;
+  border: 1.5px solid var(--border);
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.plan-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
+.plan-card.featured { border-color: var(--green); background: var(--ink); color: white; }
+.popular-badge {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--green); color: white;
+  font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 100px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.plan-name { font-size: 14px; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.plan-card.featured .plan-name { color: rgba(255,255,255,0.6); }
+.plan-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+}
+.plan-card.featured .plan-price { color: white; }
+.plan-price span { font-size: 16px; font-weight: 400; color: var(--ink-muted); }
+.plan-card.featured .plan-price span { color: rgba(255,255,255,0.5); }
+.plan-desc { font-size: 13px; color: var(--ink-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+.plan-card.featured .plan-desc { color: rgba(255,255,255,0.6); }
+.plan-features { list-style: none; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 10px; }
+.plan-features li { font-size: 14px; display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+.plan-card.featured .plan-features li { color: rgba(255,255,255,0.8); }
+.check { color: var(--green); font-weight: 700; font-size: 16px; }
+.plan-btn {
+  width: 100%; padding: 14px; border-radius: 100px; font-size: 15px; font-weight: 500;
+  cursor: pointer; border: 1.5px solid var(--green); transition: all 0.2s;
+  background: transparent; color: var(--green);
+}
+.plan-btn:hover { background: var(--green); color: white; }
+.plan-card.featured .plan-btn { background: var(--green); color: white; border-color: var(--green); }
+.plan-card.featured .plan-btn:hover { background: var(--green-dark); }
+
+/* MEAL PLANNER */
+#planner {
+  background: var(--ink); color: white;
+}
+#planner .section-badge { background: rgba(29,158,117,0.2); color: var(--green-mid); }
+#planner .section-title { color: white; }
+#planner .section-sub { color: rgba(255,255,255,0.5); }
+.planner-ui {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px; padding: 2.5rem; max-width: 800px; margin: 0 auto;
+}
+.planner-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+.planner-field { display: flex; flex-direction: column; gap: 8px; }
+.planner-field label { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 500; }
+.planner-field select, .planner-field input {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 10px 14px; color: white;
+  font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color 0.2s;
+}
+.planner-field select option { background: #1A1A18; }
+.planner-field select:focus, .planner-field input:focus { border-color: var(--green-mid); }
+.planner-generate {
+  width: 100%; padding: 14px; border-radius: 100px;
+  background: var(--green); color: white; border: none;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; margin-bottom: 2rem;
+  font-family: 'DM Sans', sans-serif;
+}
+.planner-generate:hover { background: var(--green-dark); transform: translateY(-1px); }
+.meal-plan-result { display: none; }
+.meal-plan-result.visible { display: block; animation: fadeUp 0.5s ease; }
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.day-col { background: rgba(255,255,255,0.05); border-radius: 14px; padding: 12px 8px; text-align: center; }
+.day-name { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.day-meal { font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.5; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; }
+.day-meal:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.day-kcal { font-size: 10px; color: var(--green-mid); font-weight: 600; }
+
+/* TESTIMONIALS */
+#testimonials { background: white; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.testimonial-card {
+  background: var(--cream); border-radius: 20px; padding: 1.5rem;
+  border: 1px solid var(--border); transition: all 0.3s;
+}
+.testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.stars { color: var(--amber); font-size: 14px; margin-bottom: 1rem; letter-spacing: 2px; }
+.testimonial-text { font-size: 14px; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 10px; }
+.author-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+}
+.author-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.author-role { font-size: 12px; color: var(--ink-muted); }
+
+/* FINANCIALS */
+#financials { background: var(--cream); }
+.fin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+.fin-card {
+  background: white; border-radius: 20px; padding: 1.5rem;
+  border: 1px solid var(--border); text-align: center;
+}
+.fin-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 700; color: var(--green); margin-bottom: 6px;
+}
+.fin-lbl { font-size: 13px; color: var(--ink-muted); }
+.roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.roadmap-phase {
+  background: white; border-radius: 20px; padding: 1.5rem;
+  border: 1px solid var(--border); position: relative;
+}
+.phase-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--green); margin-bottom: 8px;
+}
+.roadmap-phase h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.roadmap-phase ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.roadmap-phase ul li { font-size: 13px; color: var(--ink-muted); padding-left: 14px; position: relative; }
+.roadmap-phase ul li::before { content: '·'; position: absolute; left: 0; color: var(--green); font-size: 18px; line-height: 1; }
+.phase-num {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 28px; height: 28px; background: var(--green-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--green-dark);
+}
+
+/* SIGNUP */
+#signup {
+  background: var(--green); color: white; text-align: center;
+  padding: 6rem 5%;
+}
+#signup .section-title { color: white; margin-bottom: 0.5rem; }
+.signup-sub { font-size: 17px; color: rgba(255,255,255,0.75); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.signup-form { display: flex; gap: 12px; max-width: 480px; margin: 0 auto; justify-content: center; flex-wrap: wrap; }
+.signup-input {
+  flex: 1; min-width: 200px; padding: 14px 20px; border-radius: 100px;
+  border: none; font-size: 15px; font-family: 'DM Sans', sans-serif;
+  outline: none; background: rgba(255,255,255,0.95);
+}
+.signup-btn {
+  background: var(--ink); color: white; border: none;
+  padding: 14px 28px; border-radius: 100px; font-size: 15px;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.signup-btn:hover { background: var(--ink-soft); transform: translateY(-1px); }
+.signup-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+.success-msg { display: none; font-size: 18px; font-weight: 600; color: white; }
+
+/* FOOTER */
+footer {
+  background: var(--ink); color: white;
+  padding: 3rem 5% 2rem;
+}
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 2rem; }
+.footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 8px; max-width: 260px; line-height: 1.6; }
+.footer-links h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--green-mid); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.3); }
+.footer-tag { background: rgba(29,158,117,0.2); color: var(--green-mid); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  #hero { grid-template-columns: 1fr; padding-top: 7rem; }
+  .hero-visual { display: none; }
+  .features-layout { grid-template-columns: 1fr; }
+  .plans-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .fin-grid { grid-template-columns: repeat(2, 1fr); }
+  .roadmap { grid-template-columns: 1fr 1fr; }
+  .week-grid { grid-template-columns: repeat(4, 1fr); }
+  .planner-row { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+/* SMOOTH SCROLL HIGHLIGHT */
+.active-section { color: var(--green) !important; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">
+    <div class="logo-mark">N</div>
+    NutriBox
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#financials">Traction</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circle"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">🌱 Launching in Bhopal, MP</div>
+    <h1 class="hero-title">Eat smart.<br>Every single <span>day.</span></h1>
+    <p class="hero-sub">NutriBox delivers personalized, nutritionist-aligned meals to students and professionals — tailored to your goals, tracked to the calorie, delivered to your door.</p>
+    <div class="hero-actions">
+      <a href="#plans" class="btn-primary">See plans from ₹1,499</a>
+      <a href="#how" class="btn-secondary">How it works ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">3,000+</div>
+        <div class="hero-stat-lbl">Meals delivered</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div>
+        <div class="hero-stat-val">50+</div>
+        <div class="hero-stat-lbl">Happy subscribers</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div>
+        <div class="hero-stat-val">4.8★</div>
+        <div class="hero-stat-lbl">Customer rating</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual" style="position:relative;">
+    <div class="floating-card left reveal">
+      <div class="fc-val">1,840</div>
+      <div class="fc-lbl">Calories today</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-header">
+          <div class="phone-header-top">
+            <div>
+              <div class="phone-greeting">Good afternoon,</div>
+              <div class="phone-name">Aditya 👋</div>
+            </div>
+            <div class="phone-avatar">AM</div>
+          </div>
+          <div class="cal-pill">
+            <span>1,840</span> / 2,200 kcal
+            <p>82g protein · on track</p>
+          </div>
+        </div>
+        <div class="phone-body">
+          <p style="font-size:12px;font-weight:600;color:var(--ink-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Today's meals</p>
+          <div class="meal-card-mini">
+            <div style="display:flex;align-items:center;">
+              <div class="meal-dot"></div>
+              <div><div class="meal-name">Dal Tadka + Roti</div><div class="meal-time">Lunch · 12:30 PM</div></div>
+            </div>
+            <div class="meal-kcal">540 kcal</div>
+          </div>
+          <div class="meal-card-mini">
+            <div style="display:flex;align-items:center;">
+              <div class="meal-dot amber"></div>
+              <div><div class="meal-name">Grilled Paneer</div><div class="meal-time">Dinner · 7:30 PM</div></div>
+            </div>
+            <div class="meal-kcal">620 kcal</div>
+          </div>
+          <div style="background:var(--green-light);border-radius:12px;padding:10px;margin-top:6px;">
+            <div style="font-size:11px;font-weight:600;color:var(--green-dark);margin-bottom:4px;">🚴 Delivery on the way</div>
+            <div style="background:rgba(0,0,0,0.08);border-radius:100px;height:4px;">
+              <div style="width:65%;height:100%;background:var(--green);border-radius:100px;"></div>
+            </div>
+            <div style="font-size:10px;color:var(--green-dark);margin-top:4px;">Arriving in ~20 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floating-card right reveal" style="animation-delay:0.3s;">
+      <div class="fc-val" style="color:var(--green);">25%</div>
+      <div class="fc-lbl">Profit margin</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-badge">The problem</div>
+    <h2 class="section-title" style="color:white;">Healthy eating is<br>broken for students.</h2>
+    <p class="section-sub">Existing tiffin services and cloud kitchens offer fixed menus, no nutrition info, and zero personalization. The result: poor health outcomes for millions.</p>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-icon">🍱</div>
+        <h3>Fixed menus only</h3>
+        <p>No customization based on dietary needs, goals, or health conditions.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">📊</div>
+        <h3>Zero nutrition visibility</h3>
+        <p>Students have no idea how many calories or macros they're consuming daily.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">⚠️</div>
+        <h3>Inconsistent quality</h3>
+        <p>No standardized hygiene monitoring or quality checks across vendors.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">🔁</div>
+        <h3>Daily manual ordering</h3>
+        <p>No subscription automation — users must place orders individually each day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-badge">How it works</div>
+    <h2 class="section-title">From signup to delivery<br>in 3 simple steps.</h2>
+    <p class="section-sub">We've made healthy eating as effortless as possible. Set your preferences once, and NutriBox handles everything else.</p>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3>Tell us your goals</h3>
+        <p>Weight loss, muscle gain, budget — set your dietary preferences and we build your plan.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:0.1s;">
+        <div class="step-num">2</div>
+        <h3>Choose your plan</h3>
+        <p>Pick a subscription (Basic, Pro, or Elite). One payment — meals sorted for the month.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:0.2s;">
+        <div class="step-num">3</div>
+        <h3>Meals are auto-generated</h3>
+        <p>Our algorithm assigns your weekly meal plan. Vendors prep and deliver on schedule.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:0.3s;">
+        <div class="step-num">4</div>
+        <h3>Track & refine</h3>
+        <p>View calories, macros, and delivery status in real time. Swap meals weekly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="features-layout">
+      <div>
+        <div class="section-badge">What makes us different</div>
+        <h2 class="section-title">Data-driven meals.<br>Real results.</h2>
+        <p class="section-sub">NutriBox isn't just a tiffin service. It's a nutrition system built for the goals of modern students and professionals.</p>
+        <div class="feature-list">
+          <div class="feature-item reveal">
+            <div class="feature-icon-box">🎯</div>
+            <div>
+              <h4>Goal-based personalization</h4>
+              <p>Our algorithm maps your age, weight, and goal to a calorie range and meal plan. No guesswork.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal" style="transition-delay:0.1s;">
+            <div class="feature-icon-box">🧮</div>
+            <div>
+              <h4>Full nutritional transparency</h4>
+              <p>Every meal shows calories, protein, carbs, and fats. Know exactly what you're eating.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal" style="transition-delay:0.2s;">
+            <div class="feature-icon-box">🔄</div>
+            <div>
+              <h4>Subscription automation</h4>
+              <p>No daily ordering. Your meals are auto-generated and scheduled every week.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal" style="transition-delay:0.3s;">
+            <div class="feature-icon-box">✅</div>
+            <div>
+              <h4>Vendor quality control</h4>
+              <p>All kitchen partners follow standardized recipes and hygiene checklists for consistency.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="features-visual reveal">
+        <p style="font-size:14px;font-weight:600;color:var(--ink-muted);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.5px;">Sample nutrition breakdown</p>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Dal Tadka + Jeera Rice</div>
+        <div style="font-size:14px;color:var(--ink-muted);margin-bottom:1.5rem;">Lunch · Vegetarian · Weight loss plan</div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;">
+          <div style="text-align:center;background:var(--green-light);border-radius:14px;padding:12px;">
+            <div style="font-size:22px;font-weight:700;color:var(--green-dark);">540</div>
+            <div style="font-size:11px;color:var(--green-dark);opacity:0.7;">Calories</div>
+          </div>
+          <div style="text-align:center;background:var(--purple-light);border-radius:14px;padding:12px;">
+            <div style="font-size:22px;font-weight:700;color:#3C3489;">28g</div>
+            <div style="font-size:11px;color:#3C3489;opacity:0.8;">Protein</div>
+          </div>
+          <div style="text-align:center;background:var(--amber-light);border-radius:14px;padding:12px;">
+            <div style="font-size:22px;font-weight:700;color:#633806;">72g</div>
+            <div style="font-size:11px;color:#633806;opacity:0.8;">Carbs</div>
+          </div>
+        </div>
+
+        <div id="nutritionBars">
+          <div class="nutrition-bar">
+            <div class="nb-label"><span>Protein</span><span>28g / 80g goal</span></div>
+            <div class="nb-track"><div class="nb-fill" id="b1" style="width:0%;background:#7F77DD;"></div></div>
+          </div>
+          <div class="nutrition-bar">
+            <div class="nb-label"><span>Carbohydrates</span><span>72g / 210g goal</span></div>
+            <div class="nb-track"><div class="nb-fill" id="b2" style="width:0%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="nutrition-bar">
+            <div class="nb-label"><span>Fats</span><span>14g / 42g goal</span></div>
+            <div class="nb-track"><div class="nb-fill" id="b3" style="width:0%;background:#EF9F27;"></div></div>
+          </div>
+          <div class="nutrition-bar">
+            <div class="nb-label"><span>Fibre</span><span>8g / 25g goal</span></div>
+            <div class="nb-track"><div class="nb-fill" id="b4" style="width:0%;background:#5DCAA5;"></div></div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:12px;background:var(--green-light);border-radius:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">🏆</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--green-dark);">Great choice for your goal!</div>
+            <div style="font-size:12px;color:var(--green-dark);opacity:0.7;">High protein, moderate carbs — ideal for weight loss.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEAL PLANNER -->
+<section id="planner">
+  <div style="max-width:1100px;margin:0 auto;text-align:center;">
+    <div class="section-badge">Interactive tool</div>
+    <h2 class="section-title">Try our meal planner</h2>
+    <p class="section-sub" style="margin:0 auto 2.5rem;">Enter your details and see what a week of NutriBox meals looks like for your goal.</p>
+    <div class="planner-ui reveal">
+      <div class="planner-row">
+        <div class="planner-field">
+          <label>Goal</label>
+          <select id="p-goal">
+            <option value="loss">Weight loss</option>
+            <option value="gain">Muscle gain</option>
+            <option value="balanced">Balanced diet</option>
+            <option value="budget">Budget meals</option>
+          </select>
+        </div>
+        <div class="planner-field">
+          <label>Diet type</label>
+          <select id="p-diet">
+            <option value="veg">Vegetarian</option>
+            <option value="nonveg">Non-vegetarian</option>
+            <option value="vegan">Vegan</option>
+          </select>
+        </div>
+        <div class="planner-field">
+          <label>Calorie target</label>
+          <select id="p-cal">
+            <option value="1600">1,600 kcal/day</option>
+            <option value="1800" selected>1,800 kcal/day</option>
+            <option value="2200">2,200 kcal/day</option>
+            <option value="2500">2,500 kcal/day</option>
+          </select>
+        </div>
+      </div>
+      <button class="planner-generate" onclick="generatePlan()">✨ Generate my week plan</button>
+
+      <div class="meal-plan-result" id="planResult">
+        <p style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.4);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.5px;">Your personalized week</p>
+        <div class="week-grid" id="weekGrid"></div>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(29,158,117,0.15);border-radius:14px;border:1px solid rgba(93,202,165,0.3);">
+          <p style="font-size:14px;color:var(--green-mid);" id="planSummary"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;">
+      <div class="section-badge">Pricing</div>
+      <h2 class="section-title">Simple, honest pricing.</h2>
+      <p class="section-sub" style="margin:0 auto 3rem;">No hidden charges. One monthly subscription covers everything — meals, nutrition tracking, and delivery.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card reveal">
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">₹1,499 <span>/month</span></div>
+        <div class="plan-desc">1 meal/day · 5 days/week<br>Perfect for students on a budget.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Personalized meal plan</li>
+          <li><span class="check">✓</span> Calorie tracking</li>
+          <li><span class="check">✓</span> Nutritional info per meal</li>
+          <li><span class="check">✓</span> WhatsApp updates</li>
+          <li><span class="check">✓</span> Quality-checked vendors</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Get started</button>
+      </div>
+      <div class="plan-card featured reveal" style="transition-delay:0.1s;">
+        <div class="popular-badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">₹2,799 <span>/month</span></div>
+        <div class="plan-desc">2 meals/day · 6 days/week<br>The complete NutriBox experience.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Everything in Basic</li>
+          <li><span class="check">✓</span> Full macro breakdown</li>
+          <li><span class="check">✓</span> Weekly meal swap</li>
+          <li><span class="check">✓</span> Live delivery tracking</li>
+          <li><span class="check">✓</span> Progress analytics</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Get started</button>
+      </div>
+      <div class="plan-card reveal" style="transition-delay:0.2s;">
+        <div class="plan-name">Elite</div>
+        <div class="plan-price">₹3,999 <span>/month</span></div>
+        <div class="plan-desc">3 meals/day · 7 days/week<br>Full-day nutrition, fully managed.</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Everything in Pro</li>
+          <li><span class="check">✓</span> Dietitian meal review</li>
+          <li><span class="check">✓</span> Priority delivery slot</li>
+          <li><span class="check">✓</span> Medical diet support</li>
+          <li><span class="check">✓</span> Monthly nutrition report</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Get started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;">
+      <div class="section-badge">What users say</div>
+      <h2 class="section-title">Real feedback from our pilot.</h2>
+      <p class="section-sub" style="margin:0 auto 3rem;">From our initial 50-subscriber pilot in Bhopal.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Finally a tiffin service that tells me my macros. I've lost 4kg in two months just by switching to NutriBox and hitting my protein targets."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#E1F5EE;color:#0F6E56;">RK</div>
+          <div>
+            <div class="author-name">Rahul Khanna</div>
+            <div class="author-role">2nd year BCA, JLU</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.1s;">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"As a working professional eating alone, this saves me so much time and money. I don't have to think about food anymore — it just shows up."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#EEEDFE;color:#3C3489;">PS</div>
+          <div>
+            <div class="author-name">Priya Sharma</div>
+            <div class="author-role">Software Engineer, Bhopal</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:0.2s;">
+        <div class="stars">★★★★☆</div>
+        <p class="testimonial-text">"The gym-optimized plan is incredible. High protein meals, good variety, and it's cheaper than buying groceries myself. Highly recommend the Pro plan."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#FAEEDA;color:#633806;">AM</div>
+          <div>
+            <div class="author-name">Arjun Mehta</div>
+            <div class="author-role">Fitness enthusiast, MANIT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINANCIALS -->
+<section id="financials">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-badge">Business model</div>
+    <h2 class="section-title">Built to scale,<br>profitable from day one.</h2>
+    <p class="section-sub">Our subscription model + vendor outsourcing creates predictable demand with lean operations. Here's the pilot-phase projection.</p>
+    <div class="fin-grid">
+      <div class="fin-card reveal">
+        <div class="fin-val">50</div>
+        <div class="fin-lbl">Pilot subscribers</div>
+      </div>
+      <div class="fin-card reveal" style="transition-delay:0.1s;">
+        <div class="fin-val">₹1.5L</div>
+        <div class="fin-lbl">Monthly revenue</div>
+      </div>
+      <div class="fin-card reveal" style="transition-delay:0.2s;">
+        <div class="fin-val">25–30%</div>
+        <div class="fin-lbl">Profit margin</div>
+      </div>
+      <div class="fin-card reveal" style="transition-delay:0.3s;">
+        <div class="fin-val">₹3,000</div>
+        <div class="fin-lbl">Avg. revenue/user</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:20px;font-weight:600;margin-bottom:1.5rem;">Execution roadmap</h3>
+    <div class="roadmap">
+      <div class="roadmap-phase reveal">
+        <div class="phase-num">1</div>
+        <div class="phase-label">Month 1–2</div>
+        <h4>MVP launch</h4>
+        <ul>
+          <li>Onboard 3 kitchen partners</li>
+          <li>WhatsApp + Google Sheets system</li>
+          <li>Pilot in 2 student areas</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase reveal" style="transition-delay:0.1s;">
+        <div class="phase-num">2</div>
+        <div class="phase-label">Month 3–4</div>
+        <h4>Feedback & refine</h4>
+        <ul>
+          <li>Collect user data</li>
+          <li>Improve meal variety</li>
+          <li>Standardize operations</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase reveal" style="transition-delay:0.2s;">
+        <div class="phase-num">3</div>
+        <div class="phase-label">Month 5–8</div>
+        <h4>App development</h4>
+        <ul>
+          <li>React web app launch</li>
+          <li>Payment via Razorpay</li>
+          <li>Delivery tracking live</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase reveal" style="transition-delay:0.3s;">
+        <div class="phase-num">4</div>
+        <div class="phase-label">Month 9–12</div>
+        <h4>Scale</h4>
+        <ul>
+          <li>500+ subscriber target</li>
+          <li>AI-based recommendations</li>
+          <li>Expand to new cities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section id="signup">
+  <div class="section-badge" style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);margin-bottom:1rem;">Join the waitlist</div>
+  <h2 class="section-title">Ready to eat smarter?</h2>
+  <p class="signup-sub">Be among the first 100 subscribers. Early joiners get 20% off their first month.</p>
+  <div class="signup-form" id="signupForm">
+    <input type="email" class="signup-input" id="emailInput" placeholder="Enter your email address" />
+    <button class="signup-btn" onclick="handleSignup()">Join waitlist →</button>
+  </div>
+  <div class="success-msg" id="successMsg">🎉 You're on the list! We'll be in touch soon.</div>
+  <p class="signup-note">No spam. We'll only contact you when NutriBox launches in your area.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="color:white;">
+        <div class="logo-mark">N</div>
+        NutriBox
+      </div>
+      <p>Personalized subscription meal service for students and working professionals in India.</p>
+    </div>
+    <div class="footer-links">
+      <h5>Product</h5>
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#plans">Pricing</a></li>
+        <li><a href="#planner">Meal planner</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#problem">Our mission</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#financials">Roadmap</a></li>
+        <li><a href="#signup">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#">hello@nutribox.in</a></li>
+        <li><a href="#">WhatsApp us</a></li>
+        <li><a href="#">Bhopal, MP</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 NutriBox · Aditya Maheshwari · JLU09444</p>
+    <div class="footer-tag">MBA Project Proposal</div>
+  </div>
+</footer>
+
+<script>
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// NUTRITION BARS ANIMATION
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => { document.getElementById('b1').style.width = '35%'; }, 100);
+      setTimeout(() => { document.getElementById('b2').style.width = '34%'; }, 200);
+      setTimeout(() => { document.getElementById('b3').style.width = '33%'; }, 300);
+      setTimeout(() => { document.getElementById('b4').style.width = '32%'; }, 400);
+    }
+  });
+}, { threshold: 0.5 });
+const nutritionSection = document.getElementById('nutritionBars');
+if (nutritionSection) barObserver.observe(nutritionSection);
+
+// MEAL PLAN GENERATOR
+const mealData = {
+  veg: {
+    loss: ['Dal Tadka + Roti', 'Palak Paneer + Rice', 'Rajma Chawal', 'Moong Dal + Roti', 'Veg Pulao + Raita', 'Paneer Bhurji + Roti', 'Chana Masala + Rice'],
+    gain: ['Paneer Butter Masala + Rice', 'Dal Makhani + 3 Roti', 'Soya Chunk Curry + Rice', 'Chhole + Bhature', 'Veg Biryani + Raita', 'Paneer + Brown Rice', 'Mixed Dal + Roti'],
+    balanced: ['Dal Fry + Rice', 'Veg Khichdi', 'Palak Dal + Roti', 'Veg Thali', 'Rajma Rice', 'Paneer Roti', 'Dal + Sabzi + Roti'],
+    budget: ['Moong Dal + Rice', 'Daliya Khichdi', 'Arhar Dal + Roti', 'Rajma + Plain Rice', 'Besan Cheela', 'Aloo Sabzi + Roti', 'Veg Pulao']
+  },
+  nonveg: {
+    loss: ['Egg Curry + Roti', 'Chicken Tikka + Salad', 'Boiled Egg + Dal', 'Grilled Chicken + Rice', 'Fish Curry + Brown Rice', 'Egg Bhurji + Roti', 'Chicken Soup + Roti'],
+    gain: ['Chicken Breast + Rice', 'Mutton Curry + Naan', 'Egg Omelette 3-egg + Paratha', 'Chicken Biryani', 'Fish Fry + Rice', 'Prawn Curry + Rice', 'Chicken Keema + Roti'],
+    balanced: ['Egg Rice', 'Chicken Dal', 'Mutton Stew + Roti', 'Egg Fried Rice', 'Fish Curry + Rice', 'Chicken Pulao', 'Omelette + Dal + Roti'],
+    budget: ['Egg Dal + Rice', 'Chicken Soup + Roti', 'Boiled Egg + Rice', 'Egg Biryani', 'Chicken Kebab + Salad', 'Fish Fry + Dal', 'Egg Curry + Rice']
+  },
+  vegan: {
+    loss: ['Moong Dal + Brown Rice', 'Tofu Stir Fry + Roti', 'Veg Soup + Salad', 'Chickpea Curry + Rice', 'Lentil Soup + Roti', 'Rajma + Brown Rice', 'Aloo Palak + Roti'],
+    gain: ['Chhole + Naan', 'Tofu Curry + Rice', 'Peanut Rice Bowl', 'Soya Curry + Roti', 'Chickpea + Brown Rice', 'Almond Banana Smoothie + Dal', 'Veg Biryani'],
+    balanced: ['Dal + Roti', 'Veg Curry + Rice', 'Mixed Daal Khichdi', 'Tofu Sabzi + Roti', 'Rajma Rice', 'Sprouts Salad + Dal', 'Veg Thali'],
+    budget: ['Moong Dal + Rice', 'Aloo Sabzi + Roti', 'Veg Khichdi', 'Dal Soup + Roti', 'Besan Cheela', 'Rajma + Rice', 'Veg Pulao']
+  }
+};
+
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const kcalMap = { '1600': [480, 500, 520, 490, 510, 505, 495], '1800': [540, 560, 550, 570, 555, 545, 530], '2200': [660, 680, 670, 690, 675, 665, 655], '2500': [750, 780, 760, 790, 770, 760, 745] };
+
+function generatePlan() {
+  const goal = document.getElementById('p-goal').value;
+  const diet = document.getElementById('p-diet').value;
+  const cal = document.getElementById('p-cal').value;
+  const meals = mealData[diet][goal];
+  const kcals = kcalMap[cal];
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  days.forEach((day, i) => {
+    grid.innerHTML += `
+      <div class="day-col">
+        <div class="day-name">${day}</div>
+        <div class="day-meal">${meals[i]}</div>
+        <div class="day-kcal">${kcals[i]} kcal</div>
+      </div>`;
+  });
+  const goalLabels = { loss: 'weight loss', gain: 'muscle gain', balanced: 'a balanced lifestyle', budget: 'budget-conscious eating' };
+  document.getElementById('planSummary').textContent = `✅ Your ${diet === 'nonveg' ? 'non-vegetarian' : diet} plan for ${goalLabels[goal]} — avg. ${cal} kcal/day. Delivered fresh every day.`;
+  const result = document.getElementById('planResult');
+  result.classList.add('visible');
+  result.style.display = 'block';
+}
+
+// EMAIL SIGNUP
+function handleSignup() {
+  const email = document.getElementById('emailInput').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('emailInput').style.outline = '2px solid #ff4444';
+    return;
+  }
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+}
+
+// NAV SHADOW ON SCROLL
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,0,0,0.06)' : 'none';
+});
+</script>
+</body>
+</html>
